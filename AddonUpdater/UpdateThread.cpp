@@ -301,10 +301,15 @@ BOOL CUpdateThread::Download( LPCTSTR lpszUrl, LPCTSTR lpszSavePath, ULONG uSize
 		UpdateSubProgress(0);
 		try
 		{
+			int flags = INTERNET_FLAG_EXISTING_CONNECT;
+			if (dwServiceType == AFX_INET_SERVICE_HTTPS) 
+			{
+				flags |= INTERNET_FLAG_SECURE | 
+					INTERNET_FLAG_IGNORE_CERT_CN_INVALID |
+					INTERNET_FLAG_IGNORE_CERT_DATE_INVALID;
+			}
 			conn = m_Session.GetHttpConnection(strServer, nPort);
-			file = conn->OpenRequest(CHttpConnection::HTTP_VERB_GET, strObject, NULL, 1, NULL, NULL, INTERNET_FLAG_SECURE | 
-				INTERNET_FLAG_IGNORE_CERT_CN_INVALID |
-				INTERNET_FLAG_IGNORE_CERT_DATE_INVALID);
+			file = conn->OpenRequest(CHttpConnection::HTTP_VERB_GET, strObject, NULL, 1, NULL, NULL, flags);
 			file->SendRequest();
 			UpdateSubProgress(10);
 			DWORD dwStatus = 0;
