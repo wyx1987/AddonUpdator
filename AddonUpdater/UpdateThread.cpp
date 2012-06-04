@@ -383,11 +383,15 @@ void CUpdateThread::RemoveFolderIfEmpty( CString &strWOWPath, CString &strPath )
 		if (!find.IsDots())
 			return;
 	}
-	SHFILEOPSTRUCT op = {0};
-	op.wFunc = FO_DELETE;
-	op.pFrom = strWOWPath + strPath + _T('\0');
-	op.fFlags = FOF_NOCONFIRMATION;
-	SHFileOperation(&op);
+
+	if (GetFileAttributes(strWOWPath + strPath) != INVALID_FILE_ATTRIBUTES)
+	{
+		SHFILEOPSTRUCT op = {0};
+		op.wFunc = FO_DELETE;
+		op.pFrom = strWOWPath + strPath + _T('\0');
+		op.fFlags = FOF_NOCONFIRMATION;
+		SHFileOperation(&op);
+	}
 	RemoveFolderIfEmpty(strWOWPath, strPath.Mid(0, strPath.ReverseFind(_T('\\'))));
 }
 

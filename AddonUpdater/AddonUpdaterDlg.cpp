@@ -234,6 +234,7 @@ LRESULT CAddonUpdaterDlg::OnUpdateCommandButton( WPARAM wParam, LPARAM lParam )
 		GetDlgItem(IDOK)->SetWindowText(_T("取消"));
 		break;
 	case COMMAND_BUTTON_PLAY:
+		m_pUpdateThread = NULL;
 		GetDlgItem(IDOK)->SetWindowText(_T("启动游戏"));
 		break;
 	default:
